@@ -1,0 +1,35 @@
+{
+  "schemes" : [
+    {
+      "pointer" : {
+        "disableAcceleration" : true,
+        "speed" : 0.0689655172413792768,
+        "acceleration" : 0.9
+      },
+      "if" : {
+        "device" : {
+          "vendorID" : "0x46d",
+          "productID" : "0xc53f",
+          "category" : "mouse",
+          "productName" : "USB Receiver"
+        }
+      }
+    },
+    {
+      "pointer" : {
+        "disableAcceleration" : true,
+        "acceleration" : 0.9,
+        "speed" : 0.0689655172413792768
+      },
+      "if" : {
+        "device" : {
+          "productID" : "0x400",
+          "productName" : "USB Optical Mouse ",
+          "category" : "mouse",
+          "vendorID" : "0x30fa"
+        }
+      }
+    }
+  ],
+  "$schema" : "https:\/\/schema.linearmouse.app\/0.9.5"
+}
