@@ -4,3 +4,6 @@
 [submodule "nvim"]
 	path = nvim
 	url = https://github.com/netrolite/nvim-config
+[submodule "nvim-config"]
+	path = nvim-config
+	url = https://github.com/netrolite/nvim-config
