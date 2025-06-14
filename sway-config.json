@@ -1,0 +1,147 @@
+# Read `man 5 sway` for a complete reference
+# The default config for sway is in /etc/sway/config
+
+# Mod4 = Windows key
+# Mod1 = Alt
+set $mod Mod1
+set $left h
+set $down j
+set $up k
+set $right l
+set $term ghostty
+set $menu tofi-drun | xargs swaymsg exec --
+
+output * bg /usr/share/backgrounds/sway/forest.jpg fill
+output DP-2 mode 1920x1080@165Hz pos 0 0
+output HDMI-A-1 mode 1600x900@60Hz pos 1920 300
+workspace 1 output DP-2
+workspace 2 output HDMI-A-1
+
+exec swayidle -w \
+         timeout 1200 'swaylock -f -c 000000' \
+         timeout 2400 'systemctl suspend' \
+	 before-sleep 'swaylock -f -c 000000'
+
+input type:keyboard {
+    xkb_layout us,ru
+    repeat_delay 200
+    repeat_rate 40
+    xkb_options caps:escape,grp:win_space_toggle
+}
+
+# Start a terminal
+bindsym $mod+Return exec $term
+
+# Kill focused window
+bindsym $mod+Shift+q kill
+
+# Start your launcher
+bindsym $mod+d exec $menu
+
+# Drag windows by holding down $mod and left mouse button.
+# Resize them with right mouse button + $mod.
+floating_modifier $mod normal
+bindsym $mod+Shift+c reload
+
+# Exit sway (logs you out of your Wayland session)
+bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+
+# Move your focus around
+bindsym $mod+$left focus left
+bindsym $mod+$down focus down
+bindsym $mod+$up focus up
+bindsym $mod+$right focus right
+
+# Move the focused window with the same, but add Shift
+bindsym $mod+Shift+$left move left
+bindsym $mod+Shift+$down move down
+bindsym $mod+Shift+$up move up
+bindsym $mod+Shift+$right move right
+
+set $wmod Mod1
+bindsym $wmod+1 workspace number 1
+bindsym $wmod+2 workspace number 2
+bindsym $wmod+3 workspace number 3
+bindsym $wmod+4 workspace number 4
+bindsym $wmod+5 workspace number 5
+bindsym $wmod+6 workspace number 6
+bindsym $wmod+7 workspace number 7
+bindsym $wmod+8 workspace number 8
+bindsym $wmod+9 workspace number 9
+bindsym $wmod+0 workspace number 10
+
+bindsym $wmod+Shift+1 move container to workspace number 1
+bindsym $wmod+Shift+2 move container to workspace number 2
+bindsym $wmod+Shift+3 move container to workspace number 3
+bindsym $wmod+Shift+4 move container to workspace number 4
+bindsym $wmod+Shift+5 move container to workspace number 5
+bindsym $wmod+Shift+6 move container to workspace number 6
+bindsym $wmod+Shift+7 move container to workspace number 7
+bindsym $wmod+Shift+8 move container to workspace number 8
+bindsym $wmod+Shift+9 move container to workspace number 9
+bindsym $wmod+Shift+0 move container to workspace number 10
+
+# You can "split" the current object of your focus with
+# $mod+b or $mod+v, for horizontal and vertical splits
+# respectively.
+bindsym $mod+b splith
+bindsym $mod+v splitv
+
+# Switch the current container between different layout styles
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# Make the current focus fullscreen
+bindsym $mod+f fullscreen
+
+# Toggle the current focus between tiling and floating mode
+bindsym $mod+Shift+space floating toggle
+
+# Swap focus between the tiling area and the floating area
+bindsym $mod+space focus mode_toggle
+
+# Move focus to the parent container
+bindsym $mod+a focus parent
+
+#
+# Scratchpad:
+#
+# Sway has a "scratchpad", which is a bag of holding for windows.
+# You can send windows there and get them back later.
+
+# Move the currently focused window to the scratchpad
+bindsym $mod+Shift+minus move scratchpad
+
+# Show the next scratchpad window or hide the focused scratchpad window.
+# If there are multiple scratchpad windows, this command cycles through them.
+bindsym $mod+minus scratchpad show
+
+bindsym $mod+r mode "resize"
+mode "resize" {
+	bindsym $left resize shrink width 40px
+	bindsym $down resize grow height 40px
+	bindsym $up resize shrink height 40px
+	bindsym $right resize grow width 40px
+	# Return to default mode
+	bindsym Escape mode "default"
+}
+
+# Special keys to adjust volume via PulseAudio
+bindsym --locked XF86AudioMute exec pactl set-sink-mute \@DEFAULT_SINK@ toggle
+bindsym --locked XF86AudioLowerVolume exec pactl set-sink-volume \@DEFAULT_SINK@ -5%
+bindsym --locked XF86AudioRaiseVolume exec pactl set-sink-volume \@DEFAULT_SINK@ +5%
+bindsym --locked Shift+XF86AudioLowerVolume exec pactl set-sink-volume \@DEFAULT_SINK@ -1%
+bindsym --locked Shift+XF86AudioRaiseVolume exec pactl set-sink-volume \@DEFAULT_SINK@ +1%
+bindsym --locked XF86AudioMicMute exec pactl set-source-mute \@DEFAULT_SOURCE@ toggle
+# Special keys to adjust brightness via brightnessctl
+bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
+bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
+# Special key to take a screenshot with grim
+#bindsym Print exec grim
+bindsym Pause exec systemctl suspend
+
+# Waybar (status bar):
+bar swaybar_command waybar
+
+include /etc/sway/config.d/*
